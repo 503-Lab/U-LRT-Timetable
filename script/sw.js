@@ -1,5 +1,5 @@
 // キャッシュ名
-const CACHE_NAME = 'my-cache-v1';
+const CACHE_NAME = 'file-cache-v1';
 // キャッシュするファイルのリスト
 const FILES_TO_CACHE = [
     '/index.html',

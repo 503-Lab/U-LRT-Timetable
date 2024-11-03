@@ -1,8 +1,7 @@
-// 現在時刻 を 取得して return
-function getCurrentTime() {
-    const now = new Date();
-    const hours = ('0' + now.getHours()).slice(-2);
-    const minutes = ('0' + now.getMinutes()).slice(-2);
+// Date型 を 文字列型 に変換
+function toStringTime(date) {
+    const hours = ('0' + date.getHours()).slice(-2);
+    const minutes = ('0' + date.getMinutes()).slice(-2);
     return `${hours}:${minutes}`;
 }
 

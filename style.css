@@ -91,6 +91,10 @@ body {
   color: #ffd700;
 }
 
+.notice-leeway {
+  color: #b2d235;
+}
+
 /* マップのスタイル */
 .map {
   border-top: 2px solid #666;

@@ -7,7 +7,7 @@ window.onload = () => {
 // 現在時刻を表示する関数
 function updateTime() {
     const event = () => {
-        document.getElementById('CurrentTime').textContent = getCurrentTime();
+        document.getElementById('CurrentTime').textContent = toStringTime(new Date());
     }
     event();
     // 10 秒毎に実行
@@ -22,9 +22,35 @@ async function updateTimetable() {
 
     const event = () => {
 
+        const now = new Date();
+
         const displayLines = getDisplayLines(todayTimetable, 2);
-        displayLines.forEach((line, index) => {
-            document.getElementById(`line_${index}`).textContent = `${line.getHours()}:${line.getMinutes()}`;
+        displayLines.forEach((line_date, index) => {
+            // 現在時刻との差を ミリ秒単位で引き算 して 単位を分に変換
+            const diffIn_min = (line_date.getTime() - now.getTime()) / (1000 * 60);
+
+            let line_text = `あと ${diffIn_min}分 `;
+            let line_text_class = "";
+
+            if (diffIn_min > WalkMinutes) {
+                line_text += "余裕で間に合います";
+                line_text_class = "notice notice-leeway"
+            } else if (diffIn_min > RunMinutes) {
+                line_text += "歩いても間に合います";
+                line_text_class = "notice notice-walk"
+            } else {
+                line_text += "走れば間に合います";
+                line_text_class = "notice notice-run"
+            }
+
+            // 電車のメッセージを設定
+            const line_text_elm = document.getElementById(`line_text_${index}`);
+            line_text_elm.textContent = line_text;
+            line_text_elm.className = line_text_class;
+
+            // 電車の時刻を設定
+            const line_time_elm = document.getElementById(`line_time_${index}`);
+            line_time_elm.textContent = toStringTime(line_date);
         });
     }
     event();
@@ -47,9 +73,12 @@ async function getTodayTimetable() {
 
 function getDisplayLines(todayTimetable, length) {
 
-    const now = new Date();
-    const now_hours = now.getHours();
-    const now_minutes = now.getMinutes();
+    // 基準時間を設定
+    const ref_date = new Date();
+    ref_date.setMinutes(ref_date.getMinutes() + HideMinutes);
+
+    const ref_hours = ref_date.getHours();
+    const ref_minutes = ref_date.getMinutes();
 
     const recentTimeList = [];
 
@@ -57,12 +86,12 @@ function getDisplayLines(todayTimetable, length) {
     for (let i = 0; i < hoursList.length; i++) {
         if (recentTimeList.length >= length) break;
         const hours = hoursList[i];
-        if (hours >= now_hours) {
+        if (hours >= ref_hours) {
             const minutesList = todayTimetable[hours];
             for (let j = 0; j < minutesList.length; j++) {
                 if (recentTimeList.length >= length) break;
                 const minutes = minutesList[j];
-                if (minutes >= now_minutes) {
+                if (minutes >= ref_minutes || ref_hours < hours) {
                     const tmpDate = new Date();
                     tmpDate.setHours(hours);
                     tmpDate.setMinutes(minutes);

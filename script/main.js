@@ -26,21 +26,21 @@ async function updateTimetable() {
 
         const displayLines = getDisplayLines(todayTimetable, 2);
         displayLines.forEach((line_date, index) => {
-            // 現在時刻との差を ミリ秒単位で引き算 して 単位を分に変換
-            const diffIn_min = (line_date.getTime() - now.getTime()) / (1000 * 60);
+            // 現在時刻との差を ミリ秒単位で引き算 して 単位を分に変換して少数を切り捨て
+            const diffIn_min = Math.floor((line_date.getTime() - now.getTime()) / (1000 * 60));
 
             let line_text = `あと ${diffIn_min}分 `;
             let line_text_class = "";
 
             if (diffIn_min > WalkMinutes) {
                 line_text += "余裕で間に合います";
-                line_text_class = "notice notice-leeway"
+                line_text_class = "notice notice-leeway";
             } else if (diffIn_min > RunMinutes) {
                 line_text += "歩いても間に合います";
-                line_text_class = "notice notice-walk"
+                line_text_class = "notice notice-walk";
             } else {
                 line_text += "走れば間に合います";
-                line_text_class = "notice notice-run"
+                line_text_class = "notice notice-run";
             }
 
             // 電車のメッセージを設定
@@ -83,22 +83,21 @@ function getDisplayLines(todayTimetable, length) {
     const recentTimeList = [];
 
     const hoursList = Object.keys(todayTimetable);
-    for (let i = 0; i < hoursList.length; i++) {
-        if (recentTimeList.length >= length) break;
-        const hours = hoursList[i];
-        if (hours >= ref_hours) {
-            const minutesList = todayTimetable[hours];
-            for (let j = 0; j < minutesList.length; j++) {
-                if (recentTimeList.length >= length) break;
-                const minutes = minutesList[j];
-                if (minutes >= ref_minutes || ref_hours < hours) {
-                    const tmpDate = new Date();
-                    tmpDate.setHours(hours);
-                    tmpDate.setMinutes(minutes);
-                    recentTimeList.push(tmpDate);
-                }
+    hoursList.some(hours => {
+        return () => {
+            if (hours >= ref_hours) {
+                const minutesList = todayTimetable[hours];
+                minutesList.some(minutes => {
+                    if (minutes >= ref_minutes || ref_hours < hours) {
+                        const tmpDate = new Date();
+                        tmpDate.setHours(hours);
+                        tmpDate.setMinutes(minutes);
+                        recentTimeList.push(tmpDate);
+                    }
+                    if (recentTimeList.length >= length) return true;
+                });
             }
         }
-    }
+    });
     return recentTimeList;
 }

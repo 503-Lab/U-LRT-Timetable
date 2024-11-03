@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,34 +10,36 @@
   <script src="./script/util.js"></script>
   <script src="./script/main.js"></script>
 </head>
+
 <body>
   <div class="container">
     <header class="header">
       <h1>宇都宮ライトレール</h1>
       <div class="current-time">現在時刻 <br><span class="time" id="CurrentTime">00:00</span></div>
     </header>
-    
-      <div class="schedule">
-        <div class="destination">宇都宮駅東口 行き (上り)</div>
-        <div class="schedule-item">
-          <p>
-            <span class="time"><a id="line_0">00:00</a> 発</span>
-            <span class="station-name">普通 陽東三丁目</span>
-          </p>
-            <span class="notice notice-run">あと 1分 走れば間に合います</span>
-        </div>
-        <div class="schedule-item">
-          <p>
-            <span class="time"><a id="line_1">00:00</a> 発</span>
-            <span class="station-name">普通 陽東三丁目</span>
-          </p>
-          <span class="notice notice-walk">あと 11分 歩いても間に合います</span>
-        </div>
-      
+
+    <div class="schedule">
+      <div class="destination">宇都宮駅東口 行き (上り)</div>
+      <div class="schedule-item">
+        <p>
+          <span class="time"><a id="line_0">00:00</a> 発</span>
+          <span class="station-name">普通 陽東三丁目</span>
+        </p>
+        <span class="notice notice-run">あと 1分 走れば間に合います</span>
+      </div>
+      <div class="schedule-item">
+        <p>
+          <span class="time"><a id="line_1">00:00</a> 発</span>
+          <span class="station-name">普通 陽東三丁目</span>
+        </p>
+        <span class="notice notice-walk">あと 11分 歩いても間に合います</span>
+      </div>
+
       <div class="map">
         <img src="map.png" alt="Map to station">
       </div>
     </div>
   </div>
 </body>
+
 </html>

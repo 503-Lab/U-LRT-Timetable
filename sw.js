@@ -2,14 +2,15 @@
 const CACHE_NAME = 'file-cache-v1';
 // キャッシュするファイルのリスト
 const FILES_TO_CACHE = [
-    '/index.html',
-    '/style.css',
-    '/script/main.js',
-    '/script/util.js',
-    '/script/config.js',
-    '/image/map.png',
-    '/image/icon/icon-192x192.png',
-    '/image/icon/icon-512x512.png'
+    './',
+    './index.html',
+    './style.css',
+    './script/main.js',
+    './script/util.js',
+    './script/config.js',
+    './image/map.png',
+    './image/icon/icon-192x192.png',
+    './image/icon/icon-512x512.png'
 ];
 
 // インストール時にファイルをキャッシュ

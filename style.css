@@ -1,0 +1,105 @@
+/* 全体のリセットと基本設定 */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: #000;
+  color: #fff;
+}
+
+/* コンテナの設定 */
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* ヘッダー部分の設定 */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px solid #666;
+  padding-bottom: 10px;
+}
+
+.header h1 {
+  font-size: 60px;
+}
+
+.current-time {
+  font-size: 30px;
+  color: #00ff00;
+}
+
+/* ライン情報のスタイル */
+.line-info {
+  padding-top: 20px;
+}
+
+.destination {
+  font-size: 40px;
+  padding-bottom: 10px;
+  text-align: centeAr;
+}
+
+/* 時刻表のスタイル */
+.schedule {
+  border-top: 2px solid #666;
+  padding-top: 30px;
+  padding-bottom: 10px;
+}
+
+.schedule-item {
+  margin-bottom: 20px;
+  padding-bottom: 0px;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.current-time .time {
+  font-size: 40px;
+  font-weight: bold;
+}
+
+.time {
+  font-size: 30px;
+  font-weight: bold;
+  margin-bottom: 4px;
+}
+
+.station-name {
+  font-size: 30px;
+}
+
+.notice {
+  margin-top: 3px;
+  font-size: 30px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.notice-run {
+  color: #ff6666;
+}
+
+.notice-walk {
+  color: #ffd700;
+}
+
+/* マップのスタイル */
+.map {
+  border-top: 2px solid #666;
+  padding-top: 20px;
+  text-align: center;
+}
+
+.map img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 10px;
+}

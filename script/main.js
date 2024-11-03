@@ -26,8 +26,8 @@ async function updateTimetable() {
 
         const displayLines = getDisplayLines(todayTimetable, 2);
         displayLines.forEach((line_date, index) => {
-            // 現在時刻との差を ミリ秒単位で引き算 して 単位を分に変換
-            const diffIn_min = (line_date.getTime() - now.getTime()) / (1000 * 60);
+            // 現在時刻との差を ミリ秒単位で引き算 して 単位を分に変換して少数を切り捨て
+            const diffIn_min = Math.floor((line_date.getTime() - now.getTime()) / (1000 * 60));
 
             let line_text = `あと ${diffIn_min}分 `;
             let line_text_class = "";

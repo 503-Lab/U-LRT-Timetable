@@ -28,10 +28,10 @@ async function updateTimetable(todayTimetable) {
         let line_text = `あと ${diffIn_min}分 `;
         let line_text_class = "";
 
-        if (diffIn_min > WalkMinutes) {
+        if (diffIn_min >= WalkMinutes) {
             line_text += "余裕で間に合います";
             line_text_class = "notice notice-leeway";
-        } else if (diffIn_min > RunMinutes) {
+        } else if (diffIn_min >= RunMinutes) {
             line_text += "歩いても間に合います";
             line_text_class = "notice notice-walk";
         } else {

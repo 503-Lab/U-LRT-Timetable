@@ -1,5 +1,9 @@
 
 window.onload = async () => {
+
+    // フルスクリーンにする
+    document.documentElement.requestFullscreen();
+
     let todayTimetable = await getTodayTimetable();
     const event = () => {
         updateTime();

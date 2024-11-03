@@ -3,7 +3,7 @@
     "short_name": "U-LRT 時刻表",
     "description": "宇都宮ライトレールの直近の時刻表を表示するシステム",
     "start_url": "./index.html",
-    "display": "fullscreen",
+    "display": "standalone",
     "background_color": "#ffffff",
     "theme_color": "#000000",
     "icons": [

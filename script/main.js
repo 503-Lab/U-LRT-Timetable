@@ -54,12 +54,23 @@ async function updateTimetable(todayTimetable) {
 async function getTodayTimetable() {
     const today = await getTodayEvent();
 
-    if (today.isHoliday || today.isWeekend) {
-        // もし土日、祝日なら
-        return Timetable.weekends_holidays;// 土日、祝日の時刻表を返す
+    console.log(`today:`);
+    console.log(today);
+
+    // 今日のイベントを取得できたら
+    if (today) {
+        if (today.isHoliday || today.isWeekend) {
+            // もし土日、祝日なら
+            return Timetable.weekends_holidays;// 土日、祝日の時刻表を返す
+        } else {
+            // もし平日なら
+            return Timetable.weekdays;// 平日の時刻表を返す
+        }
     } else {
-        // もし平日なら
-        return Timetable.weekdays;// 平日の時刻表を返す
+        // 今日のイベントを取得できなかったらオフラインで 土日 を計算
+        const today = new Date().getDay();
+        // 0: 日曜日, 6: 土曜日
+        return today === 0 || today === 6 ? Timetable.weekends_holidays : Timetable.weekdays;
     }
 }
 
@@ -91,4 +102,15 @@ function getDisplayLines(todayTimetable, length) {
         }
     });
     return recentTimeList;
+}
+
+
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('sw.js').then(function (registration) {
+        // 登録成功
+        console.log('ServiceWorker の登録に成功しました。スコープ: ', registration.scope);
+    }).catch(function (err) {
+        // 登録失敗
+        console.log('ServiceWorker の登録に失敗しました。', err);
+    });
 }

@@ -7,9 +7,9 @@ const FILES_TO_CACHE = [
     '/script/main.js',
     '/script/util.js',
     '/script/config.js',
-    '/image/map.js',
-    '/image/icon/icon-192x192.js',
-    '/image/icon/icon-512x512.js'
+    '/image/map.png',
+    '/image/icon/icon-192x192.png',
+    '/image/icon/icon-512x512.png'
 ];
 
 // インストール時にファイルをキャッシュ

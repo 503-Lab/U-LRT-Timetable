@@ -1,13 +1,10 @@
+let todayTimetable;// 今日の時刻表
+let currentDay;//現在の曜日
 
 window.onload = async () => {
-
-    // フルスクリーンにする
-    document.documentElement.requestFullscreen();
-
-    let todayTimetable = await getTodayTimetable();
     const event = () => {
         updateTime();
-        updateTimetable(todayTimetable);
+        updateTimetable();
     }
     event();
     // 10 秒毎に実行
@@ -20,27 +17,43 @@ function updateTime() {
 }
 
 // 時刻表を表示する関数
-async function updateTimetable(todayTimetable) {
-
+async function updateTimetable() {
     const now = new Date();
 
+    const nowDay = now.getDay();
+    if (!todayTimetable || currentDay !== nowDay) {
+        todayTimetable = await getTodayTimetable();
+        currentDay = nowDay;
+    }
+
     const displayLines = getDisplayLines(todayTimetable, 2);
-    displayLines.forEach((line_date, index) => {
-        // 現在時刻との差を ミリ秒単位で引き算 して 単位を分に変換して少数を切り捨て
-        const diffIn_min = Math.floor((line_date.getTime() - now.getTime()) / (1000 * 60));
 
-        let line_text = `あと ${diffIn_min}分 `;
-        let line_text_class = "";
+    for (let index = 0; index < 2; index++) {
+        let line_date = displayLines[index];
+        let line_text = "";
+        let line_text_class = "notice";
 
-        if (diffIn_min >= WalkMinutes) {
-            line_text += "余裕で間に合います";
-            line_text_class = "notice notice-leeway";
-        } else if (diffIn_min >= RunMinutes) {
-            line_text += "歩いても間に合います";
-            line_text_class = "notice notice-walk";
+        if (line_date) {
+            // 現在時刻との差を ミリ秒単位で引き算 して 単位を分に変換して少数を切り捨て
+            const diffIn_min = Math.floor((line_date.getTime() - now.getTime()) / (1000 * 60));
+            line_text = `あと ${diffIn_min}分 `;
+
+            if (diffIn_min >= WalkMinutes) {
+                line_text += "余裕で間に合います";
+                line_text_class = "notice notice-leeway";
+            } else if (diffIn_min >= RunMinutes) {
+                line_text += "歩いても間に合います";
+                line_text_class = "notice notice-walk";
+            } else {
+                line_text += "走れば間に合います";
+                line_text_class = "notice notice-run";
+            }
         } else {
-            line_text += "走れば間に合います";
-            line_text_class = "notice notice-run";
+            const tmp_date = new Date();
+            tmp_date.setHours(0);
+            tmp_date.setMinutes(0);
+            line_date = tmp_date;
+            line_text = "なし";
         }
 
         // 電車のメッセージを設定
@@ -51,7 +64,7 @@ async function updateTimetable(todayTimetable) {
         // 電車の時刻を設定
         const line_time_elm = document.getElementById(`line_time_${index}`);
         line_time_elm.textContent = toStringTime(line_date);
-    });
+    };
 }
 
 // 今日の時刻表を取得する関数

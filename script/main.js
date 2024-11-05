@@ -95,12 +95,16 @@ function getDisplayLines(todayTimetable, length) {
 
     // 基準時間を設定
     const ref_date = new Date();
+    const tmp_hours = ref_date.getHours();
     ref_date.setMinutes(ref_date.getMinutes() + HideMinutes);
 
     const ref_hours = ref_date.getHours();
     const ref_minutes = ref_date.getMinutes();
 
     const recentTimeList = [];
+
+    // 基準時間の日付と現在の日付が違う場合
+    if (tmp_hours !== ref_hours) return recentTimeList;
 
     const hoursList = Object.keys(todayTimetable);
     hoursList.some(hours => {

@@ -1,4 +1,5 @@
-let todayTimetable;// 今日の時刻表
+let todayTimetable;// 今日の上がりの時刻表
+let todaytimetable2;//　今日の下がりの時刻表
 let currentDay;//現在の曜日
 
 window.onload = async () => {
@@ -21,54 +22,20 @@ async function updateTimetable() {
     const now = new Date();
 
     const nowDay = now.getDay();
-    if (!todayTimetable || currentDay !== nowDay) {
-        todayTimetable = await getTodayTimetable();
+    if (!todayTimetable  || currentDay !== nowDay) {
+        todayTimetable = await getTodayTimetable(Yoto3chomeAgariTimetable);
+        todayTimetable2 = await getTodayTimetable(UniversityYotoCampusSagariTimetable);
         currentDay = nowDay;
     }
 
     const displayLines = getDisplayLines(todayTimetable, 2);
-
-    for (let index = 0; index < 2; index++) {
-        let line_date = displayLines[index];
-        let line_text = "";
-        let line_text_class = "notice";
-
-        if (line_date) {
-            // 現在時刻との差を ミリ秒単位で引き算 して 単位を分に変換して少数を切り捨て
-            const diffIn_min = Math.floor((line_date.getTime() - now.getTime()) / (1000 * 60));
-            line_text = `あと ${diffIn_min}分 `;
-
-            if (diffIn_min >= WalkMinutes) {
-                line_text += "余裕で間に合います";
-                line_text_class = "notice notice-leeway";
-            } else if (diffIn_min >= RunMinutes) {
-                line_text += "歩いても間に合います";
-                line_text_class = "notice notice-walk";
-            } else {
-                line_text += "走れば間に合います";
-                line_text_class = "notice notice-run";
-            }
-        } else {
-            const tmp_date = new Date();
-            tmp_date.setHours(0);
-            tmp_date.setMinutes(0);
-            line_date = tmp_date;
-            line_text = "なし";
-        }
-
-        // 電車のメッセージを設定
-        const line_text_elm = document.getElementById(`line_text_${index}`);
-        line_text_elm.textContent = line_text;
-        line_text_elm.className = line_text_class;
-
-        // 電車の時刻を設定
-        const line_time_elm = document.getElementById(`line_time_${index}`);
-        line_time_elm.textContent = toStringTime(line_date);
-    };
+    const displayLines2 = getDisplayLines(todayTimetable2, 2);
+    writeDisplayLines(1, displayLines);
+    writeDisplayLines(2, displayLines, 2);
 }
 
 // 今日の時刻表を取得する関数
-async function getTodayTimetable() {
+async function getTodayTimetable(Timetable) {
     const today = await getTodayEvent();
 
     console.log(`today:`);
@@ -125,6 +92,46 @@ function getDisplayLines(todayTimetable, length) {
     return recentTimeList;
 }
 
+function writeDisplayLines(display_index, displayLines) {
+    const now = new Date();
+    for (let index = 0; index < displayLines.length; index++) {
+        let line_date = displayLines[index];
+        let line_text = "";
+        let line_text_class = "notice";
+
+        if (line_date) {
+            // 現在時刻との差を ミリ秒単位で引き算 して 単位を分に変換して少数を切り捨て
+            const diffIn_min = Math.floor((line_date.getTime() - now.getTime()) / (1000 * 60));
+            line_text = `あと ${diffIn_min}分 `;
+
+            if (diffIn_min >= WalkMinutes) {
+                line_text += "余裕で間に合います";
+                line_text_class = "notice notice-leeway";
+            } else if (diffIn_min >= RunMinutes) {
+                line_text += "歩いても間に合います";
+                line_text_class = "notice notice-walk";
+            } else {
+                line_text += "走れば間に合います";
+                line_text_class = "notice notice-run";
+            }
+        } else {
+            const tmp_date = new Date();
+            tmp_date.setHours(0);
+            tmp_date.setMinutes(0);
+            line_date = tmp_date;
+            line_text = "なし";
+        }
+
+        // 電車のメッセージを設定
+        const line_text_elm = document.getElementById(`line${display_index}_text_${index}`);
+        line_text_elm.textContent = line_text;
+        line_text_elm.className = line_text_class;
+
+        // 電車の時刻を設定
+        const line_time_elm = document.getElementById(`line${display_index}_time_${index}`);
+        line_time_elm.textContent = toStringTime(line_date);
+    };
+}
 
 if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('./sw.js').then(function (registration) {

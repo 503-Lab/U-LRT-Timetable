@@ -83,6 +83,14 @@ body {
   justify-content: flex-end;
 }
 
+.Precautions{
+  font-size: 30px;
+  padding-right: 5%;
+  display: flex;
+  justify-content: flex-end;
+  color: #ff0000;
+}
+
 .notice-run {
   color: #ff6666;
 }
@@ -107,6 +115,9 @@ body {
   height: auto;
   border-radius: 10px;
 }
+
+
+
 
 /*　画面サイズ 512pxまで適用　*/
 @media screen and (max-width: 512px) {
@@ -136,6 +147,9 @@ body {
   }
 
   .notice {
+    font-size: 20px;
+  }
+  .Precautions{
     font-size: 20px;
   }
 }

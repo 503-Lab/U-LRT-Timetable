@@ -88,8 +88,8 @@ const UniversityYotoCampusSagariTimetable = {
 const GetTodayEventURL = "https://script.google.com/macros/s/AKfycbylIU-u5zUlqXsjbx_P2uc8syqCQoMy8zONPkvbatQWgpgznCVRgVv8JVymKUcN8tu0/exec";
 
 // 現在時刻 + HideMinutes 分 を過ぎた時刻表を非表示にする
-const HideMinutes = 3;
+const HideMinutes = 7;
 // 現在時刻 + RunMinutes 分 を過ぎたら走れば間に合う
-const RunMinutes = 10;
+const RunMinutes = 11;
 // 現在時刻 + WalkMinutes 分 を過ぎたら歩いても間に合う
 const WalkMinutes = 15;

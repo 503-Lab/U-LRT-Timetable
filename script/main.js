@@ -1,5 +1,4 @@
-let todayTimetable;// 今日の上がりの時刻表
-let todaytimetable2;//　今日の下がりの時刻表
+let todayTimetables = [];// 今日の上がりの時刻表
 let currentDay;//現在の曜日
 
 window.onload = async () => {
@@ -22,16 +21,16 @@ async function updateTimetable() {
     const now = new Date();
 
     const nowDay = now.getDay();
-    if (!todayTimetable  || currentDay !== nowDay) {
-        todayTimetable = await getTodayTimetable(Yoto3chomeAgariTimetable);
-        todayTimetable2 = await getTodayTimetable(UniversityYotoCampusSagariTimetable);
+    if (todayTimetables.length !== 2 || currentDay !== nowDay) {
+        todayTimetables[0] = await getTodayTimetable(Yoto3chomeAgariTimetable);
+        todayTimetables[1] = await getTodayTimetable(UniversityYotoCampusSagariTimetable);
         currentDay = nowDay;
     }
 
-    const displayLines = getDisplayLines(todayTimetable, 2);
-    const displayLines2 = getDisplayLines(todayTimetable2, 2);
-    writeDisplayLines(1, displayLines);
-    writeDisplayLines(2, displayLines, 2);
+    todayTimetables.forEach((value, index) => {
+        const displayLines = getDisplayLines(value, 2);
+        writeDisplayLines(index, displayLines, 2);
+    });
 }
 
 // 今日の時刻表を取得する関数
@@ -58,7 +57,7 @@ async function getTodayTimetable(Timetable) {
     }
 }
 
-function getDisplayLines(todayTimetable, length) {
+function getDisplayLines(targetTimetable, length) {
 
     // 基準時間を設定
     const ref_date = new Date();
@@ -73,10 +72,10 @@ function getDisplayLines(todayTimetable, length) {
     // 基準時間の日付と現在の日付が違う場合
     if (tmp_date !== ref_date.getDate()) return recentTimeList;
 
-    const hoursList = Object.keys(todayTimetable);
+    const hoursList = Object.keys(targetTimetable);
     hoursList.some(hours => {
         if (hours >= ref_hours) {
-            const minutesList = todayTimetable[hours];
+            const minutesList = targetTimetable[hours];
             return minutesList.some(minutes => {
                 if (minutes >= ref_minutes || ref_hours < hours) {
                     const tmpDate = new Date();
@@ -92,9 +91,9 @@ function getDisplayLines(todayTimetable, length) {
     return recentTimeList;
 }
 
-function writeDisplayLines(display_index, displayLines) {
+function writeDisplayLines(display_index, displayLines, len) {
     const now = new Date();
-    for (let index = 0; index < displayLines.length; index++) {
+    for (let index = 0; index < len; index++) {
         let line_date = displayLines[index];
         let line_text = "";
         let line_text_class = "notice";

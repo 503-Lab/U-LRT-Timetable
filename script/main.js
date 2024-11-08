@@ -110,7 +110,7 @@ function writeDisplayLines(display_index, displayLines, len) {
                 line_text += "歩いても間に合います";
                 line_text_class = "notice notice-walk";
             } else {
-                line_text += "走れば間に合います";
+                line_text += "早歩きで間に合います";
                 line_text_class = "notice notice-run";
             }
         } else {

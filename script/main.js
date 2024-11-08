@@ -1,4 +1,4 @@
-let todayTimetable;// 今日の時刻表
+let todayTimetables = [];// 今日の上がりの時刻表
 let currentDay;//現在の曜日
 
 window.onload = async () => {
@@ -21,14 +21,79 @@ async function updateTimetable() {
     const now = new Date();
 
     const nowDay = now.getDay();
-    if (!todayTimetable || currentDay !== nowDay) {
-        todayTimetable = await getTodayTimetable();
+    if (todayTimetables.length !== 2 || currentDay !== nowDay) {
+        todayTimetables[0] = await getTodayTimetable(Yoto3chomeAgariTimetable);
+        todayTimetables[1] = await getTodayTimetable(UniversityYotoCampusSagariTimetable);
         currentDay = nowDay;
     }
 
-    const displayLines = getDisplayLines(todayTimetable, 2);
+    todayTimetables.forEach((value, index) => {
+        const displayLines = getDisplayLines(value, 2);
+        writeDisplayLines(index, displayLines, 2);
+    });
+}
 
-    for (let index = 0; index < 2; index++) {
+// 今日の時刻表を取得する関数
+async function getTodayTimetable(Timetable) {
+    const today = await getTodayEvent();
+
+    console.log(`today:`);
+    console.log(today);
+
+    // 今日のイベントを取得できたら
+    if (today) {
+        if (today.isHoliday || today.isWeekend) {
+            // もし土日、祝日なら
+            return Timetable.weekends_holidays;// 土日、祝日の時刻表を返す
+        } else {
+            // もし平日なら
+            return Timetable.weekdays;// 平日の時刻表を返す
+        }
+    } else {
+        // 今日のイベントを取得できなかったらオフラインで 土日 を計算
+        const today = new Date().getDay();
+        // 0: 日曜日, 6: 土曜日
+        return today === 0 || today === 6 ? Timetable.weekends_holidays : Timetable.weekdays;
+    }
+}
+
+function getDisplayLines(targetTimetable, length) {
+
+    // 基準時間を設定
+    const ref_date = new Date();
+    const tmp_date = ref_date.getDate();
+    ref_date.setMinutes(ref_date.getMinutes() + HideMinutes);
+
+    const ref_hours = ref_date.getHours();
+    const ref_minutes = ref_date.getMinutes();
+
+    const recentTimeList = [];
+
+    // 基準時間の日付と現在の日付が違う場合
+    if (tmp_date !== ref_date.getDate()) return recentTimeList;
+
+    const hoursList = Object.keys(targetTimetable);
+    hoursList.some(hours => {
+        if (hours >= ref_hours) {
+            const minutesList = targetTimetable[hours];
+            return minutesList.some(minutes => {
+                if (minutes >= ref_minutes || ref_hours < hours) {
+                    const tmpDate = new Date();
+                    tmpDate.setHours(hours);
+                    tmpDate.setMinutes(minutes);
+                    recentTimeList.push(tmpDate);
+                }
+                if (recentTimeList.length >= length) return true;
+                return false;
+            });
+        }
+    });
+    return recentTimeList;
+}
+
+function writeDisplayLines(display_index, displayLines, len) {
+    const now = new Date();
+    for (let index = 0; index < len; index++) {
         let line_date = displayLines[index];
         let line_text = "";
         let line_text_class = "notice";
@@ -57,74 +122,15 @@ async function updateTimetable() {
         }
 
         // 電車のメッセージを設定
-        const line_text_elm = document.getElementById(`line_text_${index}`);
+        const line_text_elm = document.getElementById(`line${display_index}_text_${index}`);
         line_text_elm.textContent = line_text;
         line_text_elm.className = line_text_class;
 
         // 電車の時刻を設定
-        const line_time_elm = document.getElementById(`line_time_${index}`);
+        const line_time_elm = document.getElementById(`line${display_index}_time_${index}`);
         line_time_elm.textContent = toStringTime(line_date);
     };
 }
-
-// 今日の時刻表を取得する関数
-async function getTodayTimetable() {
-    const today = await getTodayEvent();
-
-    console.log(`today:`);
-    console.log(today);
-
-    // 今日のイベントを取得できたら
-    if (today) {
-        if (today.isHoliday || today.isWeekend) {
-            // もし土日、祝日なら
-            return Timetable.weekends_holidays;// 土日、祝日の時刻表を返す
-        } else {
-            // もし平日なら
-            return Timetable.weekdays;// 平日の時刻表を返す
-        }
-    } else {
-        // 今日のイベントを取得できなかったらオフラインで 土日 を計算
-        const today = new Date().getDay();
-        // 0: 日曜日, 6: 土曜日
-        return today === 0 || today === 6 ? Timetable.weekends_holidays : Timetable.weekdays;
-    }
-}
-
-function getDisplayLines(todayTimetable, length) {
-
-    // 基準時間を設定
-    const ref_date = new Date();
-    const tmp_date = ref_date.getDate();
-    ref_date.setMinutes(ref_date.getMinutes() + HideMinutes);
-
-    const ref_hours = ref_date.getHours();
-    const ref_minutes = ref_date.getMinutes();
-
-    const recentTimeList = [];
-
-    // 基準時間の日付と現在の日付が違う場合
-    if (tmp_date !== ref_date.getDate()) return recentTimeList;
-
-    const hoursList = Object.keys(todayTimetable);
-    hoursList.some(hours => {
-        if (hours >= ref_hours) {
-            const minutesList = todayTimetable[hours];
-            return minutesList.some(minutes => {
-                if (minutes >= ref_minutes || ref_hours < hours) {
-                    const tmpDate = new Date();
-                    tmpDate.setHours(hours);
-                    tmpDate.setMinutes(minutes);
-                    recentTimeList.push(tmpDate);
-                }
-                if (recentTimeList.length >= length) return true;
-                return false;
-            });
-        }
-    });
-    return recentTimeList;
-}
-
 
 if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('./sw.js').then(function (registration) {

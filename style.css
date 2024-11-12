@@ -83,7 +83,7 @@ body {
   justify-content: flex-end;
 }
 
-.Precautions{
+.Precautions {
   font-size: 30px;
   padding-right: 5%;
   display: flex;
@@ -107,11 +107,12 @@ body {
 .map {
   border-top: 2px solid #666;
   padding-top: 20px;
+  padding-bottom: 100px;
   text-align: center;
 }
 
 .map img {
-  max-width: 100%;
+  max-width: 90%;
   height: auto;
   border-radius: 10px;
 }
@@ -149,7 +150,12 @@ body {
   .notice {
     font-size: 20px;
   }
-  .Precautions{
+
+  .Precautions {
     font-size: 20px;
+  }
+
+  .map {
+    display: none;
   }
 }

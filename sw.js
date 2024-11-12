@@ -8,7 +8,8 @@ const FILES_TO_CACHE = [
     './script/main.js',
     './script/util.js',
     './script/config.js',
-    './image/map.png',
+    './image/map/UniversityYotoCampus.png',
+    './image/map/Yoto3chome.png',
     './image/icon/icon-192x192.png',
     './image/icon/icon-512x512.png'
 ];

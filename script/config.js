@@ -1,4 +1,4 @@
-const Yoto3chomeAgariTimetable = {
+const Yoto3chome_up_timetable = {
   weekdays: {
     5: [35, 50, 59],
     6: [11, 22, 29, 36, 45, 51, 55],
@@ -42,7 +42,7 @@ const Yoto3chomeAgariTimetable = {
     23: [32]
   }
 };
-const UniversityYotoCampusSagariTimetable = {
+const UniversityYotoCampus_down_timetable = {
   weekdays: {
     5: [],
     6: [0, 16, 30, 40, 50, 58],

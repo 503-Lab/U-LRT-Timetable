@@ -22,8 +22,8 @@ async function updateTimetable() {
 
     const nowDay = now.getDay();
     if (todayTimetables.length !== 2 || currentDay !== nowDay) {
-        todayTimetables[0] = await getTodayTimetable(Yoto3chomeAgariTimetable);
-        todayTimetables[1] = await getTodayTimetable(UniversityYotoCampusSagariTimetable);
+        todayTimetables[0] = await getTodayTimetable(Yoto3chome_up_timetable);
+        todayTimetables[1] = await getTodayTimetable(UniversityYotoCampus_down_timetable);
         currentDay = nowDay;
     }
 

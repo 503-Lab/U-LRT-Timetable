@@ -22,8 +22,13 @@ async function updateTimetable() {
 
     const nowDay = now.getDay();
     if (todayTimetables.length !== 2 || currentDay !== nowDay) {
-        todayTimetables[0] = await getTodayTimetable(Yoto3chome_up_timetable);
-        todayTimetables[1] = await getTodayTimetable(UniversityYotoCampus_down_timetable);
+        // 今日のイベントを取得できたら
+        const today = await getTodayEvent();
+        console.log(`today:`);
+        console.log(today);
+
+        todayTimetables[0] = await getTodayTimetable(Yoto3chome_up_timetable, today);
+        todayTimetables[1] = await getTodayTimetable(UniversityYotoCampus_down_timetable, today);
         currentDay = nowDay;
     }
 
@@ -33,13 +38,9 @@ async function updateTimetable() {
     });
 }
 
+
 // 今日の時刻表を取得する関数
-async function getTodayTimetable(Timetable) {
-    const today = await getTodayEvent();
-
-    console.log(`today:`);
-    console.log(today);
-
+function getTodayTimetable(Timetable, today) {
     // 今日のイベントを取得できたら
     if (today) {
         if (today.isHoliday || today.isWeekend) {

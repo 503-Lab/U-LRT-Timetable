@@ -35,8 +35,9 @@ self.addEventListener('fetch', (event) => {
                     fetch(event.request).then((networkResponse) => {
                         // レスポンスが有効な場合のみキャッシュを更新
                         if (networkResponse && networkResponse.status === 200) {
+                            const networkResponseClone = networkResponse.clone();
                             caches.open(CACHE_NAME).then((cache) => {
-                                cache.put(event.request, networkResponse.clone());
+                                cache.put(event.request, networkResponseClone);
                             });
                         }
                     });
@@ -46,8 +47,9 @@ self.addEventListener('fetch', (event) => {
                 return fetch(event.request).then((networkResponse) => {
                     // 取得したレスポンスをキャッシュに追加
                     if (networkResponse && networkResponse.status === 200) {
+                        const networkResponseClone = networkResponse.clone();
                         caches.open(CACHE_NAME).then((cache) => {
-                            cache.put(event.request, networkResponse.clone());
+                            cache.put(event.request, networkResponseClone);
                         });
                     }
                     return networkResponse; // ネットワークからのレスポンスを返す

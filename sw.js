@@ -27,30 +27,19 @@ self.addEventListener('install', (event) => {
 
 // フェッチイベントをリスニング
 self.addEventListener('fetch', (event) => {
-    event.respondWith(caches.match(event.request).then((response) => {
-        // キャッシュが見つかった場合
-        if (response) {
-            // ネットワークにリクエストを送信する
-            return fetch(event.request).then((networkResponse) => {
-                // キャッシュを更新
-                putCache(event, networkResponse);
-                // ネットワークからのレスポンスを返す
-                return networkResponse;
-            }).catch(() => {
-                // オフラインの場合はキャッシュのレスポンスを返す
-                return response;
-            });
-        }
-        // キャッシュが見つからない場合はネットワークから取得
-        return fetch(event.request).then((networkResponse) => {
+    event.respondWith(caches.match(event.request).then(async (response) => {
+        try {
+            // ネットワークにリクエストを送信
+            const networkResponse = await fetch(event.request);
             // キャッシュを更新
             putCache(event, networkResponse);
             // ネットワークからのレスポンスを返す
             return networkResponse;
-        }).catch(() => {
-            // オフラインでキャッシュもない場合
-            return new Response("", { status: 404 });
-        });
+        } catch {
+            // キャッシュが見つかった場合はキャッシュのレスポンスを返す
+            // そうでなければ ステータスコード 404 の空の文字列を返す
+            return response ? response : new Response("", { status: 404 });
+        }
     }));
 });
 

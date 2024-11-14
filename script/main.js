@@ -52,9 +52,9 @@ function getTodayTimetable(Timetable, today) {
         }
     } else {
         // 今日のイベントを取得できなかったらオフラインで 土日 を計算
-        const today = new Date().getDay();
+        const tmp_day = new Date().getDay();
         // 0: 日曜日, 6: 土曜日
-        return today === 0 || today === 6 ? Timetable.weekends_holidays : Timetable.weekdays;
+        return tmp_day === 0 || tmp_day === 6 ? Timetable.weekends_holidays : Timetable.weekdays;
     }
 }
 
@@ -130,7 +130,7 @@ function writeDisplayLines(display_index, displayLines, len) {
         // 電車の時刻を設定
         const line_time_elm = document.getElementById(`line${display_index}_time_${index}`);
         line_time_elm.textContent = toStringTime(line_date);
-    };
+    }
 }
 
 if ('serviceWorker' in navigator) {

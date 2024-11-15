@@ -1,8 +1,9 @@
 let todayTimetables = [];// 今日の時刻表
 let currentDay;// 現在の曜日
 
-window.onload = async () => {
+window.onload = () => {
     const event = () => {
+        DateManager.setDate(new Date());
         updateTime();
         updateTimetable();
     }

@@ -31,7 +31,6 @@ class DateManager {
     static now = new Date();
     // 時間取得
     static getDate() {
-        console.log(this.now)
         return new Date(this.now);
     }
     // 時間設定

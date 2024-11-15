@@ -8,8 +8,8 @@ window.onload = () => {
         updateTimetable();
     }
     event();
-    // 10 秒毎に実行
-    setInterval(event, 10000);
+    // 3 秒毎に実行
+    setInterval(event, 3000);
 }
 
 // 現在時刻を表示する関数

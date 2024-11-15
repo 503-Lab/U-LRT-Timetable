@@ -13,12 +13,12 @@ window.onload = async () => {
 
 // 現在時刻を表示する関数
 function updateTime() {
-    document.getElementById('CurrentTime').textContent = toStringTime(new Date());
+    document.getElementById('CurrentTime').textContent = toStringTime(DateManager.getDate());
 }
 
 // 時刻表を表示する関数
 async function updateTimetable() {
-    const now = new Date();
+    const now = DateManager.getDate();
 
     const nowDay = now.getDay();
     if (todayTimetables.length !== 2 || currentDay !== nowDay) {
@@ -52,7 +52,7 @@ function getTodayTimetable(Timetable, today) {
         }
     } else {
         // 今日のイベントを取得できなかったらオフラインで 土日 を計算
-        const tmp_day = new Date().getDay();
+        const tmp_day = DateManager.getDate().getDay();
         // 0: 日曜日, 6: 土曜日
         return tmp_day === 0 || tmp_day === 6 ? Timetable.weekends_holidays : Timetable.weekdays;
     }
@@ -61,7 +61,7 @@ function getTodayTimetable(Timetable, today) {
 function getDisplayLines(targetTimetable, length) {
 
     // 基準時間を設定
-    const ref_date = new Date();
+    const ref_date = DateManager.getDate();
     const tmp_date = ref_date.getDate();
     ref_date.setMinutes(ref_date.getMinutes() + HideMinutes);
 
@@ -79,7 +79,7 @@ function getDisplayLines(targetTimetable, length) {
             const minutesList = targetTimetable[hours];
             return minutesList.some(minutes => {
                 if (minutes >= ref_minutes || ref_hours < hours) {
-                    const tmpDate = new Date();
+                    const tmpDate = DateManager.getDate();
                     tmpDate.setHours(hours);
                     tmpDate.setMinutes(minutes);
                     recentTimeList.push(tmpDate);
@@ -93,7 +93,7 @@ function getDisplayLines(targetTimetable, length) {
 }
 
 function writeDisplayLines(display_index, displayLines, len) {
-    const now = new Date();
+    const now = DateManager.getDate();
     for (let index = 0; index < len; index++) {
         let line_date = displayLines[index];
         let line_text = "";
@@ -115,7 +115,7 @@ function writeDisplayLines(display_index, displayLines, len) {
                 line_text_class = "notice notice-run";
             }
         } else {
-            const tmp_date = new Date();
+            const tmp_date = DateManager.getDate();
             tmp_date.setHours(0);
             tmp_date.setMinutes(0);
             line_date = tmp_date;

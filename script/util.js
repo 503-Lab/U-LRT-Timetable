@@ -20,7 +20,22 @@ function getJSON(url) {
 // 今日が休日か祝日なのか調べて結果を return
 async function getTodayEvent() {
     // 現在時刻を取得してタイムスタンプに変換（ミリ秒単位）
-    const timestamp = new Date().getTime();
+    const timestamp = DateManager.getDate().getTime();
     // GetTodayEventURL にリクエストを送信して そのレスポンスを return
     return await getJSON(`${GetTodayEventURL}?timestamp=${timestamp}`);
+}
+
+// 時刻の管理をするクラス
+class DateManager {
+    // 現在時刻
+    static now = new Date();
+    // 時間取得
+    static getDate() {
+        console.log(this.now)
+        return new Date(this.now);
+    }
+    // 時間設定
+    static setDate(new_date) {
+        this.now = new Date(new_date);
+    }
 }
